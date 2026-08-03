@@ -14,10 +14,10 @@ Status: `BUILD` (≥4.0) · `PARK` (3.2–3.9) · `DEAD` (failed gate or <3.2) �
 |---|---|
 | **BUILD** | **0 / 5** |
 | PARK | 1 |
-| DEAD | 12 |
+| DEAD | 13 |
 | Rules ingested | 3,238 |
 | Structurally killed before judgement | 1,338 + 170 duplicates + 208 deprioritised |
-| Pressure-test batches run | 1 (in flight) |
+| Pressure-test batches run | 1 — 1 of 4 agents reported, all refuted so far |
 
 Nearly every kill so far is G1/G2. If that holds while the queue keeps coming up empty,
 the constraint is more likely **G1 being too strict** than the market being empty — see
@@ -39,3 +39,4 @@ silently soften the gate mid-run.
 | 2026-08-03 | [[dhs-fixed-admission-period-i539]] | F-1/J-1/I nonimmigrants (not their institutions) | DEAD | G7 (+G3) | DHS 2026-14439 ends duration-of-status 2026-09-15. Obligated party genuinely has no vendor — because advising on I-539 is unauthorized practice of law |
 | 2026-08-03 | [[epcra-tier-ii-hazcom-2024-conformity]] | Facilities storing hazardous chemicals above EPCRA thresholds | DEAD | G1 (contested) | EPA 2026-12426 in force 2026-08-21, ~463k facilities file Tier II by Mar 1. Encamp is funded and serves this exact job — but holds ~6% of the market. Best evidence yet that G1 is too strict |
 | 2026-08-03 | [[fdta-emma-municipal-disclosure-standards]] | Municipal securities issuers — cities, counties, school districts | PARK | watch 2026-12-31 | FDTA forces machine-readable EMMA disclosure, compliance early 2027. Unfunded mandate on small governments with no vendor — but the SEC standard does not exist yet, so nothing to build against |
+| 2026-08-03 | [[workforce-pell-accountability-reporting]] | Title IV institutions offering Workforce Pell programs | DEAD | G4 (+G3, G2, A1) | Refuted in batch 1. ED's own PRA table: 100 schools x 22 hours = $219,912 total national burden. ED computes earnings centrally; Governors certify placement. NSC gives the reporting away free |

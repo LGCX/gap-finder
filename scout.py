@@ -98,11 +98,21 @@ EVIDENCE = re.compile(
     r"(?:per (?:entity|respondent|firm|small|applicant|filing|petition|appeal|facility|year)|"
     r"annually|annualized|each year|burden hours?)[^.]{0,60}\.", re.I)
 COUNT_PATTERNS = [
+    # The Paperwork Reduction Act burden table is the most decisive thing in a rule:
+    # agencies MUST state respondent count and hours. "100 schools x 22 hours = 2,200
+    # burden hours" killed the Workforce Pell candidate outright on 2026-08-03 — 100
+    # buyers and a $219,912 national burden cannot contain a business at any price.
+    # PRA patterns go FIRST: a respondent count is harder evidence than a prose estimate.
+    r"([\d,]{2,})\s*(?:schools|institutions|respondents|entities|facilities|firms|"
+    r"establishments|providers|licensees|filers)\s*(?:x|×|times)\s*[\d,.]+\s*hours",
+    r"(?:number of|total)\s+respondents[:\s]+(?:is\s+)?(?:approximately\s+)?([\d,]{2,})",
+    r"estimated\s+(?:number of\s+)?(?:annual\s+)?respondents[:\s]+([\d,]{2,})",
     r"(?:approximately|about|an estimated|estimated)\s+([\d,]{3,})\s+(?:small\s+)?"
     r"(?:entities|respondents|firms|businesses|participants|establishments|facilities|providers)",
 ]
 
-A2_FLOOR = 2400  # rubric A2 wants $200+/mo; a burden ceiling below this cannot support it
+A2_FLOOR = 2400   # rubric A2 wants $200+/mo; a burden ceiling below this cannot support it
+A1_FLOOR = 400    # under ~400 obligated entities there is no solo-viable market at any price
 
 
 def db():
@@ -253,6 +263,9 @@ def triage(limit):
         if cost is not None and cost < A2_FLOOR:
             tier, reason = "kill", f"A2: RFA burden ceiling ${cost:,}/yr < ${A2_FLOOR:,} floor"
             killed += 1
+        elif count is not None and count < A1_FLOOR:
+            tier, reason = "kill", f"A1: only {count:,} obligated entities < {A1_FLOOR} floor"
+            killed += 1
         elif ev and all(SAVINGS.search(s) for s in ev):
             # Every burden sentence it states is a saving — the rule reduces obligations.
             tier, reason = "deprioritize", "savings: economic analysis reports only cost savings"
@@ -340,6 +353,16 @@ def selftest():
     # UMRA also appears as "adjusted", not just "updated" — leaked into 3 of 21 rules.
     assert cost_of("of $100,000,000 or more (adjusted annually for inflation) in any one "
                    "year per entity.") is None
+    def count_of(text):
+        flat = " ".join(text.split())
+        for p in COUNT_PATTERNS:
+            m = re.search(p, flat, re.I)
+            if m: return num(m.group(1))
+        return None
+    # PRA burden tables state the respondent count outright — the hardest A1 evidence
+    # there is. This exact line killed Workforce Pell: 100 buyers is not a market.
+    assert count_of("we estimate 100 schools x 22 hours = 2,200 total burden hours") == 100
+    assert count_of("Estimated number of annual respondents: 25,800") == 25800
     # A rule whose own analysis reports only savings is a negative forcing function.
     assert SAVINGS.search("resulting in a savings of approximately $17.4 million per year")
     assert SAVINGS.search("annualized cost savings of $12.47 million")
