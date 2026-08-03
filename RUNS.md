@@ -16,6 +16,54 @@ Note: <anything the next run should know — a thread to pull, a dead end, a dat
 
 ---
 
+## 2026-08-03 07:40 UTC — built `scout.py`, ran the full pipeline
+Swept: Federal Register API, publication_date ≥ 2026-01-01, effective_date ≥ 2026-08-10
+Corpus: **183 rules** → kill 82 · deprioritize 16 · **review 85** · 21/85 carry burden evidence
+Generated: 0 new scored ideas this pass — the pipeline was the deliverable
+Output: [QUEUE.md](QUEUE.md), regenerate with `python3 scout.py queue`
+
+Note: **Throughput problem addressed.** Prior runs hand-examined ~15 rules out of 160; the
+pipeline now classifies the whole corpus and surfaces only what survives.
+
+Pipeline: `ingest` (FR API → SQLite) → `filter` (title tiers) → `triage` (fetch text, extract
+burden sentences, apply A2 floor) → `queue` (markdown for scoring). `python3 scout.py selftest`
+covers the filter logic.
+
+(1) **Structural kill rate 45%** (82/183), and it is honest volume, not judgment:
+airspace 33 · airworthiness 24 · species 10 · state-plan 8 · waterway 3 · nuclear-cask 2 ·
+housekeeping 1. Plus 16 deprioritized as deregulatory — kept, not killed, because a rescission
+can create a scramble (a safe harbour vanishing, a permitted thing becoming unpermitted).
+
+(2) **Per-entity cost extraction is NOT reliably deterministic — this was the day's real
+lesson.** First attempt hit 4/86 (4.7%). The single most common dollar figure in any rule is
+UMRA boilerplate, "$100 million in 1995 dollars, updated annually for inflation", which is
+present nearly everywhere and means nothing. Rewrote the stage from *classification* to
+*compression*: extract the 2-3 sentences carrying burden figures and hand those to the scorer.
+Evidence coverage went 4/86 → 21/85. The scorer now reads ~200 words instead of a
+19,537-line rule. **Automate the compression, not the judgement.**
+
+(3) **The kill audit log caught a false positive, which is the whole reason it exists.**
+The A2 auto-kill killed *Medicare IRF PPS* on "$341 per entity" — but that was the
+**regulatory review cost**, the cost of *reading* the rule, not of complying with it.
+Two bugs behind it: no exclusion for that phrase, and the exclusion check only looked at the
+matched span while the disqualifying words sit ~60 chars earlier. Both fixed, rule reinstated,
+and both cases are now asserted in `selftest`. **Never let a filter delete — log the reason and
+sample the kills.** A silent filter discarding the one good idea is the failure mode that matters.
+
+(4) **A verified number replaced a derived one.** Evidence extraction surfaced the EAS rule's
+own cost model — `25,800 entities x 10 hours x $65 ...` — replacing my hand-derived
+"~21,000 UNVERIFIED" in [[eas-cybersecurity-risk-plan-certification]]. Only one A2 kill now
+stands, and it was independently confirmed by hand earlier.
+
+(5) NEXT: score the 21 evidence-carrying rows in QUEUE.md against RUBRIC.md before touching
+anything else. Flagged on sight, unscored: **EPCRA Hazardous Chemical Inventory Reporting**
+(eff. 2026-08-21, conforming Tier II to OSHA HazCom 2024) — buyer is any facility storing
+hazardous chemicals above threshold, which is a large unglamorous population.
+
+(6) STILL OPEN: this only covers the regulatory leg. The revealed-pain sources — reviews, job
+postings, forum threads — have no ingester and remain hand-swept, and run 06:41 argued they
+deserve the rotation weight. That is the next thing to build.
+
 ## 2026-08-03 07:05 UTC — first LOCAL run (partial, run inline to validate tooling)
 Swept: Federal Register (API scan) only — **not a full spec run**, 1 source instead of 3–4
 Generated: 2 worked + ~10 surveyed and set aside | Passed gates: 0 | Scored ≥4.0: 0

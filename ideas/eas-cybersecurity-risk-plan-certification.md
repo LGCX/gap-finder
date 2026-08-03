@@ -28,9 +28,11 @@ Real, dated, already final. Effective **2026-09-29**. Annual certification to th
 Strong on B1/B2 — this is not the problem.
 
 ## Buyer
-EAS Participants. The rule does not print a headline count; the NPRM's **$21 million** total
-burden against a **≤$1,000 per-entity** annual figure implies roughly **21,000 entities**
-(derived, not stated — treat as `UNVERIFIED` until a primary count is found).
+**25,800 EAS Participants** — now verified from the rule's own cost model, not derived:
+`25,800 entities x (10 hours per entity per year) x ($65 mean hourly wage) x (1 + 7% inflation
+adjustment) x (1 + 46% benefit mark-up) = $26,198,094 total`.
+(Supersedes the earlier `~21,000 UNVERIFIED` estimate, which was back-derived from the NPRM's
+$21M figure. Found by `scout.py` evidence extraction, not by hand.)
 
 ## Why it dies
 
