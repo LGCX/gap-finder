@@ -13,11 +13,11 @@ Status: `BUILD` (≥4.0) · `PARK` (3.2–3.9) · `DEAD` (failed gate or <3.2) �
 | | |
 |---|---|
 | **BUILD** | **0 / 5** |
-| PARK | 1 |
-| DEAD | 13 |
+| PARK | 0 |
+| DEAD | 14 |
 | Rules ingested | 3,238 |
 | Structurally killed before judgement | 1,338 + 170 duplicates + 208 deprioritised |
-| Pressure-test batches run | 1 — 2 of 5 agents reported, both refuted |
+| Pressure-test batches run | 1 — 3 of 5 reported, **all three refuted** |
 
 **The G1-is-too-strict hypothesis has been tested and rejected.** It rested on
 [[epcra-tier-ii-hazcom-2024-conformity]] — a funded incumbent holding ~6% of a 463,000-buyer
@@ -39,5 +39,5 @@ search for the free government tool before counting an unserved majority.
 | 2026-08-03 | [[eas-cybersecurity-risk-plan-certification]] | EAS Participants — broadcast, cable, wireline video | DEAD | G3 (+A2, B4) | FCC 2026-15601 in force 2026-09-29, but the agency caps total annual burden at ≤$1,000/entity and a chatbot drafts the plan. Burden size caps the price |
 | 2026-08-03 | [[dhs-fixed-admission-period-i539]] | F-1/J-1/I nonimmigrants (not their institutions) | DEAD | G7 (+G3) | DHS 2026-14439 ends duration-of-status 2026-09-15. Obligated party genuinely has no vendor — because advising on I-539 is unauthorized practice of law |
 | 2026-08-03 | [[epcra-tier-ii-hazcom-2024-conformity]] | Facilities storing hazardous chemicals above EPCRA thresholds | DEAD | G4 + G1 (refuted) | Refuted in batch 1. All 50 states offer a free-or-$25 government filing path, so the "unserved 94%" is served free. Rule also *reduces* burden and lands 2028-01-01, not 2026 |
-| 2026-08-03 | [[fdta-emma-municipal-disclosure-standards]] | Municipal securities issuers — cities, counties, school districts | PARK | watch 2026-12-31 | FDTA forces machine-readable EMMA disclosure, compliance early 2027. Unfunded mandate on small governments with no vendor — but the SEC standard does not exist yet, so nothing to build against |
+| 2026-08-03 | [[fdta-emma-municipal-disclosure-standards]] | Dissemination agents / municipal advisors — NOT cities | DEAD | B2 (refuted) | Refuted in batch 1. Phase 2 muni rule not even proposed, outer bound 2028-10-01, realistic ≥2029, no taxonomy exists, ~70% chance small-issuer relief voids it. Agents hold the pen, not cities |
 | 2026-08-03 | [[workforce-pell-accountability-reporting]] | Title IV institutions offering Workforce Pell programs | DEAD | G4 (+G3, G2, A1) | Refuted in batch 1. ED's own PRA table: 100 schools x 22 hours = $219,912 total national burden. ED computes earnings centrally; Governors certify placement. NSC gives the reporting away free |
