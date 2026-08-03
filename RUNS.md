@@ -16,6 +16,44 @@ Note: <anything the next run should know — a thread to pull, a dead end, a dat
 
 ---
 
+## 2026-08-03 07:05 UTC — first LOCAL run (partial, run inline to validate tooling)
+Swept: Federal Register (API scan) only — **not a full spec run**, 1 source instead of 3–4
+Generated: 2 worked + ~10 surveyed and set aside | Passed gates: 0 | Scored ≥4.0: 0
+New ideas: none — **null run**
+Killed: [[eas-cybersecurity-risk-plan-certification]] (G3 +A2/B4 — FCC caps total burden at ≤$1,000/entity/yr) · [[dhs-fixed-admission-period-i539]] (G7 +G3 — I-539 advice is unauthorized practice of law)
+
+Note: **TOOLING CONFIRMED.** `curl` and the Federal Register JSON API both work locally.
+API returned the complete set — 475 final rules since 2026-06-15, 160 with future effective
+dates — versus the cloud run's search-roulette. This is the upgrade that justified going local.
+
+(1) **Read the Regulatory Flexibility Analysis before anything else.** The EAS kill came
+straight out of it: the FCC's own "not exceed $1,000 annually" line ended the idea in one
+sentence, no competitor research needed. The RFA gives the agency's own estimate of what
+compliance costs — which is a hard ceiling on what anyone can charge. Cheapest kill available.
+
+(2) **New pattern for G8, worth encoding:** when a burdened population is obviously unserved,
+find the *legal* reason before assuming oversight. I-539 has no vendor for the filer because
+advising on it is unauthorized practice of law — the same wall that stops universities helping
+stops a solo founder. "Obligated party has no vendor" is necessary, not sufficient.
+
+(3) **SIGNAL/NOISE, quantified:** of 100 rules pulled, 47 were pure noise (airworthiness
+directives, airspace amendments, endangered species, air-plan approvals) and **6 of the
+remaining 53 were explicitly deregulatory** — "Reducing Bureaucracy and Burden", "Rescinding",
+"Removal of Obsolete", "Revocation". This rulemaking window is stripping obligations more than
+creating them. If that holds across the next few scans, the Federal Register is structurally
+low-yield right now and the revealed-pain tier deserves the rotation weight instead.
+
+(4) **Federal Register HTML is bot-blocked** (302 → unblock.federalregister.gov). WebFetch on a
+document URL fails. Use the API `raw_text_url`; `curl` retrieves full text fine.
+
+(5) Competitor pricing check ran as designed: Terra Dotta / Sunapsis publish no pricing —
+demo-gated, enterprise sales-led. Per the job spec that is itself the finding (favourable C2),
+though it did not save either candidate.
+
+(6) NEXT RUN: this run swept only one source. Rotate to the untouched ones — enforcement
+actions, procurement (SAM.gov), vertical app-store reviews, state licensing boards — and start
+the next Federal Register scan from publication_date ≥ 2026-08-03.
+
 ## 2026-08-03 06:41 UTC
 Swept: Federal Register (final rules 0–18mo) · Standards bodies & accreditation schemes · Job postings (attempted, blocked) · Vendor EOL / sunset announcements
 Generated: 8 | Passed gates: 0 | Scored ≥4.0: 0
