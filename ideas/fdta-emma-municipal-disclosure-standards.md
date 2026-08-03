@@ -106,8 +106,37 @@ standards** in the Federal Register, or its appearance on the SEC reg-flex agend
 **2027-06-30**, then semiannually. Secondary trigger: GASB's VDFR taxonomy moving from
 voluntary to mandatory.
 
-*Caveat: the verifying agent exhausted its web-search budget before completing two parallel
-streams on competitor pricing and the issuer-vs-agent preparer split. Those remain UNVERIFIED.*
+### Competitor sweep — the commoditisation is already shipped
+
+**The decisive fact:** University of Michigan CLOSUP, working with DAC Bond, has shipped a
+**free, open-source, MIT-licensed** converter turning ACFRs from Excel/Word into inline XBRL —
+with a free hosted web version and 661 commits.
+[github.com/closup/process-xbrl](https://github.com/closup/process-xbrl). A business whose
+value is "we tag your ACFR" is competing with a university giving it away, on top of a
+royalty-free taxonomy, against free EMMA filing. XBRL US CEO Campbell Pryde anchors small
+local-government cost at **$500** — that is the number issuers will remember.
+
+**Precedent, already live:** Florida has mandated XBRL for local government filings since FYs
+ending on/after 2022-09-01 (HB 1073), with the **state paying for the tooling**. Michigan ran a
+pilot. Where this has actually happened, the government funded it.
+
+**No large incumbent has announced an FDTA product** — BondLink, MuniOS/ImageMaster, ICE,
+Bloomberg, S&P, Tyler, OpenGov, Euna, DebtBook are all silent. That reads as a rational market
+judging the rule non-binding until ~2028, not as an opening.
+Shipping muni-XBRL today: **IRIS Carbon** (ACFR iXBRL with ML auto-tagging) and **Dinocrates**
+(built Florida's taxonomy under state contract). **ClearGov + Gravity** (now merged) is the
+closest positioning play — an FDTA-readiness narrative, but no shipping XBRL export.
+
+**Premise corrections from the sweep:** Munilytics is defunct (domain parked at $595, operating
+entity is a consulting firm). DisclosureNet is not a muni vendor — acquired by Certent, then
+insightsoftware; it searches EDGAR/SEDAR/ASX. MuniOS is owned by ImageMaster, unrelated to the
+Ipreo lineage. XBRL was **not** mandated by the joint rule at all; it is principles-based, with
+format punted to agency rulemakings.
+
+*Caveat: both verifying agents exhausted their web-search budgets. bloomberg.com, workiva.com,
+gfoa.org, gasb.org and tylertech.com all 403 automated fetch. Tyler, OpenGov, Toppan Merrill and
+DFIN warrant a second pass. Cells above sourced only via search index are flagged UNVERIFIED in
+the agent transcripts.*
 
 ## History
 - 2026-08-03 — surfaced by `scout.py`; PARKed pending SEC EMMA standard
