@@ -4,11 +4,11 @@ date_found: 2026-08-03
 last_reviewed: 2026-08-03
 status: DEAD
 score: null
-failed_gate: G1 (contested — see below)
+failed_gate: G4 + G1 (refuted, batch 1)
 buyer: Facilities storing hazardous chemicals above EPCRA thresholds
 segment: ehs-chemical-reporting
 forcing_function: statute
-in_force_date: 2026-08-21
+in_force_date: 2028-01-01
 source_found: scout.py — Federal Register API, EPA 2026-12426
 ---
 
@@ -65,3 +65,48 @@ cannot tell the difference.
 
 ## History
 - 2026-08-03 — surfaced by `scout.py` evidence extraction; killed on G1 with the gate flagged as contested
+
+
+## Pressure test — batch 1, 2026-08-03: **REFUTED**
+
+The "G1 is too strict" argument above is **wrong**, and the correction matters more than
+the candidate.
+
+**1. The 94% are not unserved — they are served free by the regulator.**
+All 50 states and territories provide a designated government filing path at **$0–$75/yr**:
+E-Plan (11 states, $0 sponsored / $25 elsewhere), EPA's free Tier2 Submit desktop software
+(~12 states/territories), HazConnect (6 states, state-paid), plus 13+ free state portals
+(CA CERS, TX STEERS, PA PATTS, LA RTKWeb, MD, MI, NJ…). **None require paid software.**
+[EPA state procedures](https://www.epa.gov/epcra/state-tier-ii-reporting-requirements-and-procedures) ·
+[E-Plan charge table](https://tier2.erplan.net/onlinefiling/chargeTable.htm)
+→ **G4 fails**: there is no budget line, because the alternative is free.
+
+**2. The forcing function runs backwards.** The rule *eliminates* work: facilities report
+hazard classifications "exactly as they appear in Section 2 of the Safety Data Sheet"
+instead of converting them, which EPA says "prevents interpretation burdens on facilities."
+SDS suppliers absorb the reclassification. → B1 scores 1.
+
+**3. The date was wrong.** Compliance is **2028-01-01** (RY2027, due 2028-03-01), not
+2026-08-21. [Source](https://www.lawbc.com/epa-conforms-epcra-hazardous-chemical-inventory-reporting-requirements-with-2024-osha-hazard-communication-standard/)
+
+**4. Price ceiling.** A one-tank facility pays $25/yr, or $0 in sponsored states. Consultants
+charge $1,500–3,000 one-time for a first small filing. $200–500/mo = $2,400–6,000/yr —
+more than a consultant charges to do the entire job, for a once-a-year form.
+
+**5. Encamp is bigger than assumed:** $12M Series B (OpenView) + $30M Series C (Drive
+Capital), **$42M+ total, $150M valuation**. Pricing fully demo-gated — `/pricing` 301s to
+the homepage and appears in no sitemap. Real customer count remains `UNVERIFIED`; only
+cumulative reports-filed is published, which is what made the 6% figure misleading.
+
+**Competitor pricing, verified:** Intelex publishes $44/user/mo with a 25-user minimum
+(~$13.2k/yr floor). Everyone else — ERA, VelocityEHS, Cority, Sphera, Benchmark Gensuite,
+J.J. Keller, Triumvirate — is quote-gated. Benchmark Gensuite does not mention Tier II at all;
+Perillon is a dead brand redirecting to lisam.com.
+
+**What I got wrong:** I treated "commercial vendor has low share" as "market is unserved."
+Share of a *paid* market says nothing when the regulator gives the job away. Encoded as a
+new rule in `RUBRIC.md` under G4.
+
+## History
+- 2026-08-03 — surfaced by `scout.py`; killed on G1 with the gate flagged as contested
+- 2026-08-03 — **refuted in pressure-test batch 1**; contest withdrawn, G4 is the real killer

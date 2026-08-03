@@ -12,7 +12,7 @@ Two layers. **Gates** are pass/fail — one failure discards the idea, no score 
 | G1 | **No big incumbent** | Any player with >$50M ARR, or >$20M raised, serving *this exact buyer doing this exact job*. Horizontal giants count only if this job is in their product today. |
 | G2 | **Not a feature of someone's roadmap** | If a dominant platform in the buyer's stack (ServiceTitan, Vanta, Shopify, HubSpot, Epic, QuickBooks…) could ship this as a checkbox without changing their business model → fail. |
 | G3 | **Not LLM-zero-shot-able** | If a general chatbot does ≥80% of the job in one prompt today, fail. The product must own state, integrations, or a record of truth — not just a prompt. |
-| G4 | **Buyer has an existing budget line** | The money already leaves their account for *something* (a person, a spreadsheet-wrangler, a consultant, a fine, a legacy tool). "Would be nice to have" = fail. |
+| G4 | **Buyer has an existing budget line** | The money already leaves their account for *something* (a person, a spreadsheet-wrangler, a consultant, a fine, a legacy tool). "Would be nice to have" = fail. **Check the free alternative first — see below.** |
 | G5 | **Reachable without SEO** | A named, enumerable channel exists: association, licence registry, distributor, directory, conference, subreddit, Slack/Discord, partner. If the only plan is "rank on Google" → fail. |
 | G6 | **v1 buildable solo in ≤8 weeks** | Needs a team, hardware, or a data partnership to be useful at all → fail. |
 | G7 | **No custody trap** | Money movement, PHI at scale, licensed activity, or a certification you can't obtain in <90 days → fail *unless* that certification is itself the moat and you accept the ramp. |
@@ -58,6 +58,24 @@ Two layers. **Gates** are pass/fail — one failure discards the idea, no score 
 >
 > This cuts against the naive reading of B2. Already-in-force still beats pending on
 > *durability* — but in-force plus a served buyer is a dead end, not a signal.
+
+> **"Unserved" means unserved by anything — including free government tooling.**
+>
+> Evidence, run 2026-08-03: EPCRA Tier II was argued to be a gap because the funded
+> incumbent (Encamp, $42M raised, $150M valuation) had filed only ~27,000 reports against
+> ~463,000 reporting facilities — roughly 6% share. That argument was wrong. **All 50
+> states and territories provide a designated government filing path at $0–$75/yr**
+> (E-Plan, EPA's free Tier2 Submit, 13+ state portals). The other 94% are not unserved;
+> they are served for free, by the regulator.
+>
+> When an agency mandates a filing, it very often ships the means of filing. **Before
+> scoring G4 or counting an "unserved majority", search for the government portal.**
+> A free regulator-run tool is the most common silent killer of compliance SaaS, and it
+> is invisible if you only enumerate commercial vendors.
+>
+> Corollary on price: compare against the *whole-job* alternative, not the software
+> alternative. A one-tank facility pays $25/yr to file. $200–500/month exceeds what a
+> consultant charges to do the entire job once a year.
 
 ### C. Competition (weight 20%)
 | # | Criterion | 5 = |
