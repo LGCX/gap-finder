@@ -118,6 +118,32 @@ The `Note` line is the handoff. Write it for the next run, not for a human.
 
 ---
 
+## Pressure testing — adversarial batches
+
+Scoring a candidate yourself and *attacking* it are different jobs, and the second one is
+where candidates actually die. Anything that survives stage-2 scoring goes to a pressure
+test before it can be marked BUILD.
+
+**Protocol**
+- **Batches of 4, maximum.** Concurrency cap is a cost control, not a throughput target.
+- Each agent gets **one** candidate and a **refute-first** brief: *"Your job is to REFUTE.
+  Default to not-viable unless evidence forces otherwise."* An agent asked to evaluate
+  finds reasons to proceed; an agent asked to refute finds the incumbent.
+- Every brief must name the specific competitors to check by name, and must require
+  **fetching the actual pricing page**. Demo-gated pricing is a finding, not a dead end.
+- Every brief must ask **one decisive question** — the fact that would end the matter.
+  Past examples that worked: *"who actually holds the pen on this filing?"*, *"does the
+  agency compute this metric, or the regulated party?"*, *"do the SDS suppliers absorb
+  this change silently?"* Find that question before writing the brief.
+- Mixed batches beat uniform ones: 2 adversarial attacks on live candidates, 1 fresh
+  assessment, 1 discovery agent on an unswept source tier keeps the pool refilling while
+  the attacks run.
+- Require sources. Anything unsourced comes back marked `UNVERIFIED` and stays unscored.
+
+**Recording** — no new files. Verdicts go into the idea's own `## Pressure test` section
+and its History line; the batch itself gets a block in `RUNS.md`. A refuted candidate keeps
+its file and flips to DEAD with the killing fact quoted.
+
 ## Weekly synthesis (separate job, once a week)
 
 Read all of `ideas/`. Output: which segments keep producing, which sources are earning

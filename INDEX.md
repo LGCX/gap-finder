@@ -8,6 +8,23 @@ names serving the same buyer doing the same job are the same idea.
 
 Status: `BUILD` (≥4.0) · `PARK` (3.2–3.9) · `DEAD` (failed gate or <3.2) · `ACTIVE` (being built)
 
+## Scoreboard — target: 5 BUILD candidates
+
+| | |
+|---|---|
+| **BUILD** | **0 / 5** |
+| PARK | 1 |
+| DEAD | 12 |
+| Rules ingested | 3,238 |
+| Structurally killed before judgement | 1,338 + 170 duplicates + 208 deprioritised |
+| Pressure-test batches run | 1 (in flight) |
+
+Nearly every kill so far is G1/G2. If that holds while the queue keeps coming up empty,
+the constraint is more likely **G1 being too strict** than the market being empty — see
+[[epcra-tier-ii-hazcom-2024-conformity]], where a funded incumbent holds ~6% of a
+463,000-buyer market and the gate still reads it closed. Flag the pattern; do not
+silently soften the gate mid-run.
+
 | Date | Idea | Buyer | Status | Score / failed gate | Hook |
 |---|---|---|---|---|---|
 | 2026-08-03 | [[dmepos-annual-survey-readiness]] | DMEPOS supplier locations billing Medicare | DEAD | G2 | CMS-1828-F forces unannounced annual resurveys from 2026-01-01 — but the accreditors ship the readiness portal themselves (TCT client portal), and QPI/MedTrainer/PowerDMS already sell it |
