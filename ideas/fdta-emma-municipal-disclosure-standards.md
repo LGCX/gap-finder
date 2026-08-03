@@ -106,6 +106,34 @@ standards** in the Federal Register, or its appearance on the SEC reg-flex agend
 **2027-06-30**, then semiannually. Secondary trigger: GASB's VDFR taxonomy moving from
 voluntary to mandatory.
 
+### Price ceiling — the A2 kill, from XBRL US's own letter to the SEC
+
+XBRL US told the SEC (2025-10-11) that for this job **open-source tools are free, commercial
+tools run $1,000–$1,500/year, and an LEI costs ~$39/year**.
+[Source](https://www.xbrl.org/news/xbrl-us-responds-to-sec-on-digital-standards-for-municipal-bond-reporting/)
+
+$1,000–1,500/yr is **$83–125/month** — below the $200–500/month floor rubric A2 requires, and
+that is the *commercial* number, competing against free. **A2 fails independently of everything
+else.** Gravity's own marketing benchmarks the alternative at consultant fees of "$50,000 to
+$200,000+ per year", which tells you the value is captured by advisory, not software.
+
+### No machine-readable submission endpoint exists either
+
+MSRB's EMMA revamp shipping in 2026 is **reorganisation, not ingestion** — natural-language
+search, issuer-centric pages, expanded alerts. MSRB's Chief Product Officer framed it explicitly
+as "reorganizing this information," not new data sources, and the coverage makes no mention of
+machine-readable submissions or APIs.
+[Bond Buyer](https://www.bondbuyer.com/news/emma-website-revamp-coming-in-2026). MSRB has no rule
+to build submission plumbing against, because the SEC muni rule is not proposed.
+
+### Negative finding worth keeping
+
+**No venture-funded FDTA-specific startup could be found** — every entrant is an existing XBRL
+filing agent extending into government (IRIS Instant, Novaworks, EcoActive/Ez-XBRL), an existing
+govtech finance platform bolting on FDTA messaging (Gravity/ClearGov, DebtBook, DFIN, Workiva,
+Tyler), or free/open-source. Nobody owns this — and the market is right not to. Realistic issuer
+compliance is **~2029–2030**; nearly every vendor page still advertises a stale "2027 deadline".
+
 ### Competitor sweep — the commoditisation is already shipped
 
 **The decisive fact:** University of Michigan CLOSUP, working with DAC Bond, has shipped a

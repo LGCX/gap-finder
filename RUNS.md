@@ -16,6 +16,44 @@ Note: <anything the next run should know — a thread to pull, a dead end, a dat
 
 ---
 
+## 2026-08-03 08:30 UTC — pressure-test BATCH 1 (adversarial, 4 agents)
+Attacked: [[workforce-pell-accountability-reporting]] · [[epcra-tier-ii-hazcom-2024-conformity]] · [[fdta-emma-municipal-disclosure-standards]] · plus 2 discovery briefs
+Result: **3 attacked, 3 refuted.** Scoreboard 0 BUILD · 0 PARK · 14 DEAD.
+
+Note: **the regulatory thesis is now falsified, on evidence, and should stop consuming runs.**
+Fourteen consecutive kills. Two independent structural causes, both confirmed:
+(1) the current federal rulemaking window is largely deregulatory — 208 of 3,238 rules were
+    deprioritised as burden-removing, and several "candidates" turned out to *reduce* obligations;
+(2) **when a mandate is real, someone ships the tool free.** EPCRA: a government portal in all
+    50 states at $0–$25. FDTA: a free MIT-licensed converter from U. Michigan CLOSUP on a
+    royalty-free taxonomy, filing into a free EMMA. Workforce Pell: NSC gives the reporting away.
+Rotate weight to non-regulatory sources: revealed pain, legacy-ERP integration moats, and
+private-party mandates (an insurer has no incentive to build free tooling for those it burdens).
+
+(1) **Two new hard kills, both cheap and mechanical, now encoded:**
+  - PRA burden table — settles A1 and A2 together in the agency's own numbers. Workforce Pell:
+    "100 schools x 22 hours = $219,912" is the entire national burden. `A1_FLOOR = 400` added.
+  - **Search for the free government portal before counting an unserved majority.** New rule under
+    G4 in RUBRIC.md. This is the one that would have saved the most wasted effort.
+
+(2) **The G1-too-strict hypothesis is REJECTED.** It rested on EPCRA — a funded incumbent at ~6%
+of a 463,000-facility market. The other 94% file free through state portals. Low share of a
+*paid* market is not an unserved market. G1 stands as written; do not revisit without new evidence.
+
+(3) **Three of my own premises were wrong and the agents caught all three:** the $1.9M in the
+Workforce Pell rule was ED's own cost (evidence the compute is centralised — I read it backwards);
+EPCRA's compliance date is 2028-01-01, not 2026-08-21, and the rule *reduces* burden; FDTA's
+timeline was 18 months stale, and the buyer is a dissemination agent, not a city.
+
+(4) **OPERATIONAL — the concurrency cap does not hold.** Four agents were launched; they spawned
+children of their own and hit the 20-subagent ceiling, blocking a fifth launch. Three separate
+child agents researched FDTA, two of them *after* it was already refuted. Nested spawning both
+breaks the cost cap and wastes spend on settled questions. Constrain briefs against sub-spawning,
+or expect real cost to be several times the batch size.
+
+(5) **Two agents exhausted a 200-call web-search budget mid-task**, leaving UNVERIFIED cells.
+gfoa.org, workiva.com, bloomberg.com, tylertech.com and sec.gov PDFs all 403 automated fetch.
+
 ## 2026-08-03 07:40 UTC — built `scout.py`, ran the full pipeline
 Swept: Federal Register API, publication_date ≥ 2026-01-01, effective_date ≥ 2026-08-10
 Corpus: **183 rules** → kill 82 · deprioritize 16 · **review 85** · 21/85 carry burden evidence
