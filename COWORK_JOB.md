@@ -38,6 +38,16 @@ long-lived knowledge base, not writing a report.
 Work only the sources you selected. Follow their `cursor` notes so you resume where the
 last sweep stopped rather than re-reading the same pages.
 
+You have working `WebFetch` and `curl`. **Use them — do not rely on search snippets.**
+Read primary text: the actual rule, the actual review body, the actual job listing.
+For the Federal Register, scan the JSON API for the complete set of final rules in the
+window rather than searching for whichever rule happened to get press coverage, then
+fetch each rule's Regulatory Flexibility Analysis for its affected-entity count.
+
+If `WebFetch` and `curl` are blocked, stop and report that as the run's headline. Do not
+silently degrade to search-only and do not mark sources `cold` that you could not
+actually reach — an unreachable source is a tooling failure, not a dead source.
+
 Target ~5–10 raw candidates. Quantity is not the goal.
 
 ### Step 3 — Dedupe
@@ -50,6 +60,15 @@ the existing `ideas/<slug>.md`, append to its History, and note what changed.
 Run every survivor against the 8 gates in `RUBRIC.md`. **Actively hunt for the incumbent
 that kills it.** Spend more effort disproving than proposing. Do not soften a gate to keep
 an idea alive. An idea that survives a real attempt to kill it is worth ten that were never tested.
+
+**Before scoring C2 or killing on G1, fetch the competitor's actual pricing page.**
+"Enterprise-priced and sales-led" versus "cheap and self-serve" decides whether a gap
+exists at all, and it cannot be read off a search snippet. If a vendor hides pricing
+behind a demo request, that is itself the finding — record it. If you cannot establish
+pricing, mark it `UNVERIFIED` and say the gate is unscored rather than guessing.
+
+Apply the in-force-rule note in `RUBRIC.md` before scoring section B. A dated mandate
+with an already-served obligated party is a dead end, not a signal.
 
 Failed a gate → write a **short** `ideas/<slug>.md` (frontmatter + one paragraph naming the
 killing gate and the evidence) and index it `DEAD`. The graveyard has value: it stops the
@@ -107,10 +126,15 @@ date has arrived. Retire `dead` sources in `SOURCES.md`.
 
 ## Scheduling
 
-Cowork: create the job, paste the prompt, point at this directory, set to every 3–4 hours.
+**Runs locally, twice daily** — local scheduled task `gap-finder-scout`
+(`~/.claude/scheduled-tasks/gap-finder-scout/SKILL.md`), 7:13am and 7:13pm.
 
-From Claude Code instead:
+Local, not cloud, deliberately. The cloud sandbox
+(routine [trig_015fy3PLMKft1sJNn3GsZbKx](https://claude.ai/code/routines/trig_015fy3PLMKft1sJNn3GsZbKx),
+kept disabled as a fallback) blocks `WebFetch` and `curl` at the egress layer. That kills
+the entire revealed-pain tier, makes competitor pricing unverifiable, and forces claims
+onto secondary coverage instead of primary text. Cloud buys only "runs while the Mac is
+off" — not worth a scout that cannot read a pricing page.
 
-```bash
-claude "/schedule every 4 hours: follow /Users/luis/Projects/gap-finder/COWORK_JOB.md"
-```
+If the cloud routine is ever re-enabled, disable the local task first. Two schedulers on
+one repo race on the same commits.

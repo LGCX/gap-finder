@@ -38,7 +38,26 @@ Two layers. **Gates** are pass/fail — one failure discards the idea, no score 
 | B2 | Forcing-function durability | **Already in force**, unlikely to be repealed or deferred. (Score down anything pending; regulators defer constantly.) |
 | B3 | Evidence of unmet demand | 1–3★ reviews of the incumbent naming this exact gap · "we built an internal spreadsheet for this" posts · repeated Upwork/Fiverr requests · job ads hiring a human to do it manually. |
 | B4 | Pain frequency | Daily/weekly in the workflow, not annual. |
-| B5 | Gap freshness | Created or widened in the last 6–24 months (rule change, vendor EOL, platform deprecation, acquisition gutting a product). |
+| B5 | Gap freshness | Created or widened in the last 6–24 months (rule change, vendor EOL, platform deprecation, acquisition gutting a product). **Score 1–2 if the rule is already in force AND the obligated party is one existing compliance vendors already sell to** — see the note below. |
+
+> **An in-force rule is not a gap. It is an advertisement that a market exists.**
+>
+> Evidence, run 2026-08-03: five of eight candidates died the same way — a real,
+> already-in-force rule whose software category was already owned, either by a funded
+> vendor (Greenlight Guru, Qualio, SafetyChain, Trakref, Accruent/Fortive) or by the
+> body that runs the certification and ships its own portal.
+>
+> A dated mandate is necessary but nowhere near sufficient. Before scoring B, ask:
+> **who is the obligated party, and do compliance vendors already sell to them?**
+> If yes, the category is served and you are late. The exploitable cases are narrower:
+> - the obligated party has *no* software vendor of any kind today, or
+> - the obligation lands on a party existing vendors do *not* sell to (e.g. the rule
+>   targets facility owners but the unserved pain sits with their subcontractors), or
+> - the rule is enforced against a segment too small or too unglamorous for the
+>   incumbents to bother pursuing.
+>
+> This cuts against the naive reading of B2. Already-in-force still beats pending on
+> *durability* — but in-force plus a served buyer is a dead end, not a signal.
 
 ### C. Competition (weight 20%)
 | # | Criterion | 5 = |

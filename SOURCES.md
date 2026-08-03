@@ -1,8 +1,14 @@
 # Source Rotation Ledger
 
-The job runs every few hours. Hitting the same feeds each time returns nothing.
+The job runs twice daily. Hitting the same feeds each time returns nothing.
 **Each run: pick the 3–4 least-recently-swept sources with `yield` ≠ dead.**
 Update `last swept` and `yield` after every sweep.
+
+**Tooling assumption: this job runs locally with working `WebFetch` and `curl`.**
+Many of these sources need page bodies — review text, job listings, pricing pages,
+primary rule text. A sandboxed run without egress can only reach a third of this list,
+and marks sources `cold` that are merely unreachable. If fetch is blocked, say so and
+stop rather than downgrading sources that were never actually swept.
 
 `yield`: `hot` (produced a BUILD/PARK in last 30d) · `warm` (produced candidates) · `cold` (nothing in 3+ sweeps) · `dead` (retire it)
 
@@ -10,7 +16,9 @@ Update `last swept` and `yield` after every sweep.
 
 | Source | Last swept | Yield | Notes / cursor |
 |---|---|---|---|
-| Federal Register — final rules, effective 0–18mo | 2026-08-03 | warm | **federalregister.gov is blocked by egress policy (403) — API and HTML both. Swept indirectly via WebSearch + law-firm alerts.** Covered: EPA AIM Act (h) ER&R (eff. 2026-01-01), FDA QMSR (eff. 2026-02-02), CFPB 1071 revision (eff. 2026-06-30, compliance 2028), TSCA 8(a)(7) PFAS (due 2026-10-13), CMS-1828-F DMEPOS, CMS §6225 (proposed). Next: rotate to DOL / DOT / FCC dockets — health + environment now well mined |
+| Federal Register — final rules, effective 0–18mo | 2026-08-03 | warm | **Scan the API, do not search.** `curl -s "https://www.federalregister.gov/api/v1/documents.json?conditions[type][]=RULE&conditions[publication_date][gte]=YYYY-MM-DD&per_page=100"` → complete set, not whatever got law-firm coverage. Then fetch each rule's HTML for its **Regulatory Flexibility Analysis** — that section gives a citable count of affected small entities and the agency's own per-entity cost estimate (feeds A1/A2/A3). Covered so far: EPA AIM Act (h) ER&R (eff. 2026-01-01), FDA QMSR (eff. 2026-02-02), CFPB 1071 revision (compliance 2028), TSCA 8(a)(7) PFAS (due 2026-10-13), CMS-1828-F DMEPOS, CMS §6225 (proposed). Next: DOL / DOT / FCC — health + environment now well mined |
+| **Agency enforcement actions & consent decrees** | never | — | Fines actually levied, not rules merely written. A published penalty against a company shaped like the buyer is what makes B1 real; a rule nobody enforces scores low. Sweep EPA/OSHA/FDA/FTC/state-AG press releases |
+| **Government procurement — SAM.gov awards, EU TED tenders** | never | — | What agencies pay humans and consultants to do manually, with dollar amounts. A direct map of unautomated workflows |
 | EPA rulemaking + enforcement alerts | never | — | |
 | OSHA standards + state-plan adoptions | never | — | |
 | FDA / DOL / DOT / FCC rule dockets | never | — | rotate one agency per sweep |
@@ -31,8 +39,9 @@ Update `last swept` and `yield` after every sweep.
 | Niche Slack / Discord communities | never | — | |
 | Trade association newsletters | never | — | |
 | **Conference session titles** | never | — | agendas are a map of unsolved pain |
-| Job postings — human hired to run a spreadsheet | 2026-08-03 | cold | **Attempted, produced nothing — a tooling problem, not a dead source.** WebFetch/curl are 403-blocked by this environment's egress policy, so job boards (Indeed, LinkedIn, ZipRecruiter, Glassdoor) cannot be crawled, and WebSearch will not surface posting *body* text for phrase queries like "maintain the tracking spreadsheet". Do not re-attempt from a sandboxed run unless WebFetch works — test it first. Re-mark `—` if fetch is restored |
+| Job postings — human hired to run a spreadsheet | never | — | Previously marked cold under a sandbox with no fetch — that was a tooling failure, not a dead source, and the mark is reset. Needs page bodies: crawl Indeed / LinkedIn / ZipRecruiter listing text for phrases like "maintain the tracking spreadsheet" |
 | Upwork / Fiverr repeated identical build requests | never | — | |
+| **Vertical app-store reviews** | never | — | Shopify, QuickBooks, Xero, Epic App Orchard, Procore. Reviews scoped to one ecosystem expose gaps inside a specific stack — where integration moats (D1) live |
 
 ## Vacuums
 
