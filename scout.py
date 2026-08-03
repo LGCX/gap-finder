@@ -39,8 +39,15 @@ KILL = [
 # create a scramble (a safe harbour vanishing, a permitted thing becoming unpermitted).
 DEPRIORITIZE = [
     ("deregulatory", r"rescind|rescission|revocation|removal of obsolete|reducing bureaucracy|"
-                     r"obsolete or unnecessary|withdrawal of"),
+                     r"obsolete or unnecessary|withdrawal of|delay of effective date"),
 ]
+
+# Titles hide burden-reducing rules: 5 of 21 candidates on 2026-08-03 announced cost
+# SAVINGS in their own economic analysis while carrying a neutral title. A rule that
+# saves the regulated party money is a negative forcing function — B1 scores 1.
+SAVINGS = re.compile(
+    r"cost savings|savings of (?:approximately |about )?\$|will save|"
+    r"decrease annually by|decrease in burden|reduction in burden", re.I)
 
 # --- RFA extraction. Fail-open: no match means "stay in review", never "kill". ---
 #
@@ -56,8 +63,11 @@ DEPRIORITIZE = [
 # and aggregate figures are large. Misreads fail to kill rather than killing wrongly.
 
 BOILERPLATE = re.compile(
-    r"\$100 million in 1995 dollars|unfunded mandates reform|"
-    r"section 202|executive order 12866|updated annually for inflation|"
+    r"\$100 million in 1995 dollars|\$100,000,000 or more|unfunded mandates reform|"
+    r"section 202|executive order 12866|"
+    # UMRA text appears as both "updated" and "adjusted" — matching only one leaked
+    # pure boilerplate into the evidence of 3 of 21 rules on 2026-08-03.
+    r"(?:updated|adjusted) annually for inflation|"
     # "regulatory review cost" is the cost of READING the rule, not complying with it.
     # It is small by definition and killed a live candidate on 2026-08-03 before this
     # exclusion existed — the kill audit log is what surfaced it.
@@ -195,6 +205,9 @@ def triage(limit):
         if cost is not None and cost < A2_FLOOR:
             tier, reason = "kill", f"A2: RFA burden ceiling ${cost:,}/yr < ${A2_FLOOR:,} floor"
             killed += 1
+        elif ev and all(SAVINGS.search(s) for s in ev):
+            # Every burden sentence it states is a saving — the rule reduces obligations.
+            tier, reason = "deprioritize", "savings: economic analysis reports only cost savings"
         c.execute("UPDATE rules SET tier=?,kill_reason=COALESCE(?,kill_reason),"
                   "cost_ceiling=?,entity_count=?,evidence=?,triaged_at=? WHERE document_number=?",
                   (tier, reason, cost, count, " ⏐ ".join(ev), now, dn))
@@ -269,6 +282,13 @@ def selftest():
     # A real per-entity ceiling must still be caught.
     assert cost_of("costs per entity will not exceed $1,000 annually, based on 10 hours "
                    "of labor per entity per year.") == 1000
+    # UMRA also appears as "adjusted", not just "updated" — leaked into 3 of 21 rules.
+    assert cost_of("of $100,000,000 or more (adjusted annually for inflation) in any one "
+                   "year per entity.") is None
+    # A rule whose own analysis reports only savings is a negative forcing function.
+    assert SAVINGS.search("resulting in a savings of approximately $17.4 million per year")
+    assert SAVINGS.search("annualized cost savings of $12.47 million")
+    assert not SAVINGS.search("219 such appeals would cost approximately $135,025 annually")
     print("selftest: ok")
 
 
