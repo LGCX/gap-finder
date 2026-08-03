@@ -27,19 +27,31 @@ KILL = [
                         r"prohibited area|restricted area|\bVOR\b|jet route"),
     ("waterway",        r"drawbridge|safety zone|security zone|anchorage ground|regulated navigation"),
     ("species",         r"endangered and threatened|critical habitat|marine mammal|"
-                        r"migratory bird|fishery management|essential fish habitat"),
-    ("state-plan",      r"air plan approval|operating permit program approval|"
+                        r"migratory bird|essential fish habitat"),
+    # Fisheries quota/season notices are the second-largest noise family after
+    # airworthiness. "fishery management" alone missed most of them — the titles read
+    # "Fisheries of the ...", "Reef Fish Fishery of ...", "Snapper-Grouper Fishery ...".
+    ("fisheries",       r"fisher(?:y|ies) of|fishery management|reef fish|snapper|grouper|"
+                        r"mackerel|\bsquid\b|butterfish|game bird hunting|recreational season"),
+    ("state-plan",      r"air plan (?:approval|revision)|operating permit program approval|"
                         r"state implementation plan|promulgation of state plan|regulatory program\b"),
     ("nuclear-cask",    r"spent fuel storage cask"),
     ("housekeeping",    r"technical amendment|correcting amendment|delegation of authority|"
-                        r"privacy act of 1974|freedom of information act"),
+                        r"privacy act of 1974|freedom of information act|"
+                        # Every agency issues one of these every year, by statute. Pure noise.
+                        r"civil (?:monetary )?penalt(?:y|ies) inflation adjust"),
 ]
 
 # Removes an obligation rather than creating one. NOT a hard kill: a rescission can
 # create a scramble (a safe harbour vanishing, a permitted thing becoming unpermitted).
 DEPRIORITIZE = [
     ("deregulatory", r"rescind|rescission|revocation|removal of obsolete|reducing bureaucracy|"
-                     r"obsolete or unnecessary|withdrawal of|delay of effective date"),
+                     r"obsolete or unnecessary|withdrawal of|deletion of obsolete|"
+                     r"removing regulations|discontinu"),
+    # A delayed or postponed rule is a B2 failure: it may never land. Kept, not killed —
+    # a postponement is also a dated trigger to re-check.
+    ("delayed",      r"delay of effective date|delaying the effective date|"
+                     r"further postponement|postponement of|extension of compliance date"),
 ]
 
 # Titles hide burden-reducing rules: 5 of 21 candidates on 2026-08-03 announced cost
@@ -119,9 +131,15 @@ def get(url, tries=3):
 
 
 def ingest(since, eff_from):
+    # eff_from is optional on purpose. Filtering on effective_date excludes rules that
+    # take effect immediately but phase COMPLIANCE dates later — which is how most of the
+    # interesting mandates are written (the AIM Act refrigerant rule is the canonical case).
+    # Pass eff_from="" to scan everything and let filter/triage do the work.
     c, new, seen = db(), 0, 0
     q = {"conditions[type][]": "RULE", "conditions[publication_date][gte]": since,
-         "conditions[effective_date][gte]": eff_from, "per_page": "100", "order": "newest"}
+         "per_page": "100", "order": "newest"}
+    if eff_from:
+        q["conditions[effective_date][gte]"] = eff_from
     url = API + "?" + urllib.parse.urlencode(q) + "".join(
         "&fields[]=" + f for f in ("document_number", "title", "agencies", "effective_on",
                                    "publication_date", "html_url", "raw_text_url"))
@@ -145,9 +163,38 @@ def ingest(since, eff_from):
     print(f"ingest: {seen} rules seen, {new} new")
 
 
-def classify():
+def collapse_families(c):
+    """One logical rule split across many documents floods the queue.
+
+    PHMSA published the same pipeline standards update as 30 separate documents
+    ("Pipeline Safety: Standards Update-ASTM A53/A53M", "-NFPA 58", ...). Keep the
+    earliest of each family and mark the rest `dupe` so judgement is spent once.
+    """
+    fams = {}
+    for dn, title, pub in c.execute(
+            "SELECT document_number,title,publication_date FROM rules WHERE tier='review'"):
+        key = re.split(r"\s*[-—:]\s*", title or "", maxsplit=1)[0].strip().lower()
+        if len(key) >= 25:
+            fams.setdefault(key, []).append((pub or "", dn))
+    n = 0
+    for key, members in fams.items():
+        if len(members) < 3:
+            continue
+        for _, dn in sorted(members)[1:]:
+            c.execute("UPDATE rules SET tier='dupe',kill_reason=? WHERE document_number=?",
+                      (f"dupe: {len(members)} documents share '{key[:40]}…'", dn))
+            n += 1
+    c.commit()
+    return n
+
+
+def classify(rescan=False):
     c = db()
     counts = {}
+    if rescan:  # re-apply patterns after a filter change, but keep text-derived verdicts
+        c.execute("UPDATE rules SET tier=NULL,kill_reason=NULL WHERE "
+                  "kill_reason IS NULL OR (kill_reason NOT LIKE 'A2%' AND kill_reason NOT LIKE 'savings%')")
+        c.commit()
     for dn, title in c.execute("SELECT document_number,title FROM rules WHERE tier IS NULL"):
         t, tier, reason = title or "", "review", None
         for label, pat in KILL:
@@ -162,8 +209,9 @@ def classify():
         c.execute("UPDATE rules SET tier=?,kill_reason=? WHERE document_number=?", (tier, reason, dn))
         counts[reason or "review"] = counts.get(reason or "review", 0) + 1
     c.commit()
+    dupes = collapse_families(c)
     total = sum(counts.values())
-    print(f"filter: classified {total}")
+    print(f"filter: classified {total}, collapsed {dupes} duplicate-family documents")
     for k, v in sorted(counts.items(), key=lambda x: -x[1]):
         print(f"    {k:16} {v:5}  {v/total*100:4.1f}%" if total else "")
 
@@ -213,7 +261,7 @@ def triage(limit):
                   (tier, reason, cost, count, " ⏐ ".join(ev), now, dn))
         if i % 10 == 0:
             c.commit(); print(f"    {i}/{len(rows)}")
-        time.sleep(0.3)
+        time.sleep(0.6)  # be a good citizen against a .gov host
     c.commit()
     print(f"triage: burden evidence extracted for {found}/{len(rows)}, "
           f"killed {killed} on the A2 floor")
@@ -271,6 +319,13 @@ def selftest():
     assert tier_of("Amendment of Class D Airspace Over Groton, CT")[0] == "kill"
     assert tier_of("Rescission of Outdated Veterans Choice Program Regulations")[0] == "deprioritize"
     assert tier_of("Modernization of the Nation's Alerting Systems")[0] == "review"
+    # Fisheries titles rarely say "fishery management" — 20+ leaked past the first filter.
+    assert tier_of("Fisheries of the Northeastern United States; 2026 Chub Mackerel")[0] == "kill"
+    assert tier_of("Reef Fish Fishery of the Gulf of America; Red Snapper")[0] == "kill"
+    assert tier_of("Civil Monetary Penalty Inflation Adjustment")[0] == "kill"
+    assert tier_of("Air Plan Revisions; California; Antelope Valley AQMD")[0] == "kill"
+    assert tier_of("Deletion of Obsolete Regulations")[0] == "deprioritize"
+    assert tier_of("Horse Protection Amendments; Further Postponement of Regulations")[0] == "deprioritize"
 
     # Regression: regulatory-review cost is the cost of READING the rule. It killed a
     # live candidate on 2026-08-03 because the exclusion only checked the matched span.
@@ -297,12 +352,13 @@ if __name__ == "__main__":
     s = p.add_subparsers(dest="cmd", required=True)
     s.add_parser("selftest")
     i = s.add_parser("ingest"); i.add_argument("--since", default="2026-01-01"); i.add_argument("--effective-from", default="2026-08-10")
-    s.add_parser("filter")
+    f = s.add_parser("filter"); f.add_argument("--rescan", action="store_true",
+        help="re-apply title patterns to already-classified rules after a filter change")
     t = s.add_parser("triage"); t.add_argument("--limit", type=int, default=60)
     q = s.add_parser("queue"); q.add_argument("--out", default=str(Path(__file__).parent / "QUEUE.md"))
     a = p.parse_args()
     if a.cmd == "selftest": selftest()
     elif a.cmd == "ingest": ingest(a.since, a.effective_from)
-    elif a.cmd == "filter": classify()
+    elif a.cmd == "filter": classify(a.rescan)
     elif a.cmd == "triage": triage(a.limit)
     elif a.cmd == "queue": queue(a.out)
